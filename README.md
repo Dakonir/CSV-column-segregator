@@ -1,0 +1,1 @@
+# CSV-column-segregator
