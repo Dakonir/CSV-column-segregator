@@ -8,7 +8,11 @@ input_path = ""  # ścieżka do pliku wejściowego
 output_path = "" # ścieżka do pliku wyjściowego
 label = ""
 separator = ";"
+#Choose a column for segrgation
 Kolumna_Sortowanie = "EAN"
+#Choose aggregation map
+MapaAgregowania = {"NAZWA PRODUKTU":"first",
+                   "ILOŚĆ":"sum",}
 
 #Funkcja na wykrywanie separatora 
 def wykryj_separator(plik_wyjsciowy):
@@ -18,7 +22,7 @@ def wykryj_separator(plik_wyjsciowy):
     i = 0
     czytaj_csv = pd.read_csv(
         plik_wyjsciowy,
-        sep=separators[0],
+        sep=separators[1],
         decimal=",",
         on_bad_lines="warn"
                              )
@@ -104,8 +108,9 @@ def przetworz_dane(input_path: str, output_path: str):
         top.title("Błąd")
         label = tk.Label(top, text="Niepoprawny format pliku")
         label.grid(column=0, row=0, padx=20, pady=20)
+    #czytaj_csv["Ilosc"]=czytaj_csv["Ilosc"].fillna(1)
     summary = czytaj_csv.groupby(Kolumna_Sortowanie).agg(
-        ilosc=("ilosc", "sum")
+        MapaAgregowania
     ).reset_index()
 
     summary.to_csv(output_path, index=False, encoding='utf-8-sig', sep=';', decimal=',')
