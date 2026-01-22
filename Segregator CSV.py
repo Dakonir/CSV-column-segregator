@@ -9,7 +9,7 @@ output_path = "" # ścieżka do pliku wyjściowego
 label = ""
 separator = ";"
 Kolumna_Sortowanie = ""
-MapaAgregowania = {}
+mapaAgregowania = {}
 #Klasa GUI
 class myWindow(QMainWindow):
     def __init__(self):
@@ -156,7 +156,7 @@ def przetworz_dane(input_path: str, output_path: str):
     else:
         print("Niepoprawny Format Pliku")
     summary = czytaj_csv.groupby(Kolumna_Sortowanie).agg(
-        ilosc=("ILOŚĆ", "sum")
+        mapaAgregowania
     ).reset_index()
 
     summary.to_csv(output_path, index=False, encoding='utf-8-sig', sep=';', decimal=',')
@@ -178,4 +178,5 @@ def window():
     win.show()
     sys.exit(app.exec_())
 window() 
+
 
