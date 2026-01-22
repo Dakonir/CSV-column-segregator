@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
-import tkinter as tk
-from tkinter.filedialog import askopenfilename, asksaveasfilename, Toplevel
-from tkinter import ttk
 import sys 
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QMainWindow,QPushButton, QFileDialog
@@ -158,10 +155,6 @@ def przetworz_dane(input_path: str, output_path: str):
         print("Poprawny Format Pliku")
     else:
         print("Niepoprawny Format Pliku")
-        top = tk.Toplevel()
-        top.title("Błąd")
-        label = tk.Label(top, text="Niepoprawny format pliku")
-        label.grid(column=0, row=0, padx=20, pady=20)
     summary = czytaj_csv.groupby(Kolumna_Sortowanie).agg(
         ilosc=("ILOŚĆ", "sum")
     ).reset_index()
@@ -185,3 +178,4 @@ def window():
     win.show()
     sys.exit(app.exec_())
 window() 
+
