@@ -6,14 +6,13 @@ from PyQt5.QtWidgets import QApplication, QMainWindow,QPushButton, QFileDialog,Q
 
 input_path = ""  # ścieżka do pliku wejściowego
 output_path = "" # ścieżka do pliku wyjściowego
-label = ""
 kolumn = []
-separator = ";"
+kolumnaBezSeparatora = []
 kolumna_sortowanie = ""
-mapaAgregowania = {"1":"first"}
-gui_width = 350
-gui_height = 300
-
+mapaAgregowania = {}
+listaAgregacji = ["Pomiń","sum","first","mean","max","min"]
+guiWidth = 350
+guiHeight = 300
 labelMenuText = "Witaj w Segregatorze Plików CSV"
 labelButton1Text = "1.Wybierz plik Excel lub csv"
 LabelButton2Text = "2.Wybierz gdzie zapisać CSV"
@@ -23,7 +22,7 @@ button3Text = "4.Przetwórz i Zapisz"
 class myWindow(QMainWindow):
     def __init__(self):
         super(myWindow,self).__init__()
-        self.setGeometry(750,400,gui_width,gui_height)
+        self.setGeometry(750,400,guiWidth,guiHeight)
         self.setWindowTitle("Agregacja Pliku CSV")
         self.initUI()
         
@@ -75,10 +74,12 @@ class myWindow(QMainWindow):
         self.button4.adjustSize()
         self.button4.move(135,135)
         self.button4.clicked.connect(self.processFunction)
+        
         if len(kolumn) ==0:
             self.button4.hide()
             self.wybierzSeperator.hide()
-            self.labelWybierzSeparator.hide()            
+            self.labelWybierzSeparator.hide()
+            self.button3.hide()            
         
     def chooseFunction(self):
         correctFileExtension = wybierz_plik()
@@ -103,49 +104,114 @@ class myWindow(QMainWindow):
     def aggregateFunction(self):
         self.button3.setText("In progress")
         global kolumna_sortowanie
-        if len(kolumn) != 0:
-            kolumna_sortowanie = kolumn[self.wybierzSeperator.currentIndex()]
+        print(kolumna_sortowanie)
+        print(mapaAgregowania)
         wykonaj_zapis()
     def processFunction(self):
         global kolumna_sortowanie
+        global kolumnaBezSeparatora
         if len(kolumn) != 0:
             kolumna_sortowanie = kolumn[self.wybierzSeperator.currentIndex()]
+            kolumnaBezSeparatora = deepCopy(kolumn)
+            kolumnaBezSeparatora.pop(self.wybierzSeperator.currentIndex())
+            print(kolumnaBezSeparatora)
+            print(kolumn)
+            self.dialog = aggregationWindow()
+            self.dialog.show()
+        self.button3.show()
     
 class aggregationWindow(QMainWindow):
     def __init__(self):
         super(aggregationWindow,self).__init__()
-        self.setGeometry(750,400,300,200)
+        self.setGeometry(750,400,guiWidth,guiHeight)
         self.setWindowTitle("Agreguj plik")
         self.initUIAggregation()
     def initUIAggregation(self):
         self.labelMenu = QtWidgets.QLabel(self)
-        self.labelMenu.setText("Witaj Segregatorze Plików CSV")
+        self.labelMenu.setText("Witaj w Agregatorze Plików CSV")
         self.labelMenu.adjustSize()
-        self.labelMenu.move(70,5)
+        self.labelMenu.move(65,5)
         
         self.labelWybierzSeparator = QtWidgets.QLabel(self)
         self.labelWybierzSeparator.setText("Wybierz kolumnę według której odbędzię sie segregacja")
         self.labelWybierzSeparator.adjustSize()
-        self.labelWybierzSeparator.move(5,58)
+        self.labelWybierzSeparator.move(25,38)
         
-        self.wybierzSeperator = QtWidgets.QComboBox(self)
-        self.wybierzSeperator.addItems(kolumn)
-        self.wybierzSeperator.adjustSize()
-        self.wybierzSeperator.move(75,78)
+        self.wybierzAgregator1 = QtWidgets.QComboBox(self)
+        self.wybierzAgregator1.addItems(kolumnaBezSeparatora)
+        self.wybierzAgregator1.adjustSize()
+        self.wybierzAgregator1.move(75,68)
+        
+        self.wybierzAgregacje1 = QtWidgets.QComboBox(self)
+        self.wybierzAgregacje1.addItems(listaAgregacji)
+        self.wybierzAgregacje1.adjustSize()
+        self.wybierzAgregacje1.move(150,68)
+        
+        self.wybierzAgregator2 = QtWidgets.QComboBox(self)
+        self.wybierzAgregator2.addItems(kolumnaBezSeparatora)
+        self.wybierzAgregator2.adjustSize()
+        self.wybierzAgregator2.move(75,98)
+        
+        self.wybierzAgregacje2 = QtWidgets.QComboBox(self)
+        self.wybierzAgregacje2.addItems(listaAgregacji)
+        self.wybierzAgregacje2.adjustSize()
+        self.wybierzAgregacje2.move(150,98)
+        
+        self.wybierzAgregator3 = QtWidgets.QComboBox(self)
+        self.wybierzAgregator3.addItems(kolumnaBezSeparatora)
+        self.wybierzAgregator3.adjustSize()
+        self.wybierzAgregator3.move(75,128)
+        
+        self.wybierzAgregacje3 = QtWidgets.QComboBox(self)
+        self.wybierzAgregacje3.addItems(listaAgregacji)
+        self.wybierzAgregacje3.adjustSize()
+        self.wybierzAgregacje3.move(150,128)
+        
+        self.wybierzAgregator4 = QtWidgets.QComboBox(self)
+        self.wybierzAgregator4.addItems(kolumnaBezSeparatora)
+        self.wybierzAgregator4.adjustSize()
+        self.wybierzAgregator4.move(75,158)
+        
+        self.wybierzAgregacje4 = QtWidgets.QComboBox(self)
+        self.wybierzAgregacje4.addItems(listaAgregacji)
+        self.wybierzAgregacje4.adjustSize()
+        self.wybierzAgregacje4.move(150,158)
+        
+        self.wybierzAgregator5 = QtWidgets.QComboBox(self)
+        self.wybierzAgregator5.addItems(kolumnaBezSeparatora)
+        self.wybierzAgregator5.adjustSize()
+        self.wybierzAgregator5.move(75,188)
+        
+        self.wybierzAgregacje5 = QtWidgets.QComboBox(self)
+        self.wybierzAgregacje5.addItems(listaAgregacji)
+        self.wybierzAgregacje5.adjustSize()
+        self.wybierzAgregacje5.move(150,188)
         
         self.button1 = QPushButton(self)
         self.button1.setText("Wybierz")
         self.button1.adjustSize()
-        self.button1.move(120,115)
+        self.button1.move(120,215)
         self.button1.clicked.connect(self.processFunction)
-        
+    
     def processFunction(self):
         global kolumna_sortowanie
-        if len(kolumn) != 0:
-            kolumna_sortowanie = kolumn[self.wybierzSeperator.currentIndex()]
-        print(kolumna_sortowanie)
+        i = 0
+        agregator1 = kolumnaBezSeparatora[self.wybierzAgregator1.currentIndex()]
+        aggregacja1 = listaAgregacji[self.wybierzAgregacje1.currentIndex()]
+        agregator2 = kolumnaBezSeparatora[self.wybierzAgregator2.currentIndex()]
+        aggregacja2 = listaAgregacji[self.wybierzAgregacje2.currentIndex()]
+        agregator3 = kolumnaBezSeparatora[self.wybierzAgregator3.currentIndex()]
+        aggregacja3 = listaAgregacji[self.wybierzAgregacje3.currentIndex()]
+        agregator4 = kolumnaBezSeparatora[self.wybierzAgregator4.currentIndex()]
+        aggregacja4 = listaAgregacji[self.wybierzAgregacje4.currentIndex()]
+        agregator5 = kolumnaBezSeparatora[self.wybierzAgregator5.currentIndex()]
+        aggregacja5 = listaAgregacji[self.wybierzAgregacje5.currentIndex()]
+        agregatory = [agregator1,agregator2,agregator3,agregator4,agregator5]
+        agregacje = [aggregacja1,aggregacja2,aggregacja3,aggregacja4,aggregacja5]
+        while i < len(agregatory):
+            stworzenieMapyAgregacji(agregatory[i],agregacje[i])
+            i = i + 1
         self.close()
-        
 #Funkcja na wykrywanie separatora 
 def wykryj_separator(plik_wyjsciowy):
     global czytaj_csv
@@ -187,6 +253,7 @@ def wykryj_separator(plik_wyjsciowy):
             i = i+1
     else:
         print("ok")
+        print(kolumn)
     return kolumn 
 def wybierz_plik():
     global input_path
@@ -202,6 +269,7 @@ def wybierz_plik():
     if ".xls" in input_path or ".xlxs" in input_path:
         data_time = pd.read_excel(input_path, index_col=None)
         kolumn = data_time.columns.values.tolist()
+        print(kolumn)
         return True
     elif ".csv" in input_path:
         wykryj_separator(input_path)
@@ -231,14 +299,16 @@ def przetworz_dane(input_path: str, output_path: str):
         print("Poprawny Format Pliku")
     else:
         print("Niepoprawny Format Pliku")
+    print(mapaAgregowania)
+    print(kolumna_sortowanie)
     summary = czytaj_csv.groupby(kolumna_sortowanie).agg(
         mapaAgregowania
     ).reset_index()
 
     summary.to_csv(output_path, index=False, encoding='utf-8-sig', sep=';', decimal=',')
-#Sortowanie i Agregacja 
+#funkcja łącząca  
 def wykonaj_zapis():
-    if input_path and output_path:
+    if input_path != "" and output_path != "":
         przetworz_dane(input_path, output_path)
         print(kolumn)
         print("Plik Wykonany")
@@ -246,6 +316,26 @@ def wykonaj_zapis():
     else:
         print("Upewnij się, że wybrano plik wejściowy i miejsce zapisu.")
         return False 
+def stworzenieMapyAgregacji(wybranaKolumna,funkcjaAggregacji):
+    global mapaAgregowania
+    if funkcjaAggregacji == listaAgregacji[0] :
+        return
+    elif funkcjaAggregacji == "mean":
+        czytaj_csv[wybranaKolumna] = czytaj_csv[wybranaKolumna].astype(str).str.replace(',', '.').str.replace(r'[^0-9\.-]', '', regex=True)
+        czytaj_csv[wybranaKolumna] = pd.to_numeric(czytaj_csv[wybranaKolumna], errors="coerce")
+        mapaAgregowania.update({wybranaKolumna:funkcjaAggregacji})
+    else:
+        mapaAgregowania.update({wybranaKolumna:funkcjaAggregacji})
+def deepCopy(L):
+    ret = []
+    if isinstance(L, list):
+        for i in L:
+            ret.append(deepCopy(i))
+    elif isinstance(L,(int, float, type(None),str,bool)):
+        ret = L
+    else:
+        raise ValueError("Niespodziewany typ dla funkcji deepCopy ")
+    return ret
 # włączenie gui
 def window():
     app = QApplication(sys.argv)
